@@ -12,7 +12,6 @@
     </script>
   </head>
 <body onload="initialize()">
-	
 	<div id="fb-root"></div>
 	<script>
 	  window.fbAsyncInit = function() {
@@ -39,10 +38,15 @@
 	
 	
 	<h1>Where do my friends live around the world?</h1>
+	
+	<div class="fb-login-button"scope="user_location,friends_location,friends_checkins,friends_about_me">Login with Facebook</div>
+	<br><br>
  	<div id="map_canvas" style="width: 320px; height: 480px;"></div>
   	<div>
-	    <input id="address" type="textbox" value="Sydney, NSW">
+	    <input id="address" type="textbox" value="San Francisco, CA">
 	    <input type="button" value="Encode" onclick="codeAddress()">
+	
+	    <input type="button" value="Who am I?" onclick="login()">
 	</div>
 </body>
 </html>
