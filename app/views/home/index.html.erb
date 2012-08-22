@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB_cu9OrYJTPnwqInN975RpMhNBrd2Xie8&sensor=true">
+    </script>
+  </head>
+<body onload="initialize()">
+	
+	<div id="fb-root"></div>
+	<script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '410262649020758', // App ID
+	      channelUrl : 'http://secure-harbor-3050.herokuapp.com/', // Channel File
+	      status     : true, // check login status
+	      cookie     : true, // enable cookies to allow the server to access the session
+	      xfbml      : true  // parse XFBML
+	    });
+
+	    // Additional initialization code here
+	  };
+
+	  // Load the SDK Asynchronously
+	  (function(d){
+	     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement('script'); js.id = id; js.async = true;
+	     js.src = "//connect.facebook.net/en_US/all.js";
+	     ref.parentNode.insertBefore(js, ref);
+	   }(document));
+	</script>
+	
+	
+	<h1>Where do my friends live around the world?</h1>
+ 	<div id="map_canvas" style="width: 320px; height: 480px;"></div>
+  	<div>
+	    <input id="address" type="textbox" value="Sydney, NSW">
+	    <input type="button" value="Encode" onclick="codeAddress()">
+	</div>
+</body>
+</html>
