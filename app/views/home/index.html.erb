@@ -10,6 +10,7 @@
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB_cu9OrYJTPnwqInN975RpMhNBrd2Xie8&sensor=true">
     </script>
+	<script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script>
   </head>
 <body onload="initialize()">
 	<div id="fb-root"></div>
@@ -41,12 +42,11 @@
 	
 	<div class="fb-login-button"scope="user_location,friends_location,friends_checkins,friends_about_me">Login with Facebook</div>
 	<br><br>
- 	<div id="map_canvas" style="width: 320px; height: 480px;"></div>
-  	<div>
-	    <input id="address" type="textbox" value="San Francisco, CA">
-	    <input type="button" value="Encode" onclick="codeAddress()">
-	
-	    <input type="button" value="Who am I?" onclick="login()">
+	<div>
+		<input type="button" value="Show friends on map" onclick="main()" id="showfriendsbutton">
+		<h3 id="plotting">Plotting where friends live ...</h3>
 	</div>
+	<br><br>
+ 	<div id="map_canvas" style="width: 1024px; height: 760px;"></div>
 </body>
 </html>
