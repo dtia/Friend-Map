@@ -2,17 +2,17 @@
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-      #map_canvas { height: 100% }
-    </style>
+    <link href='http://fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css'>
+    <%= stylesheet_link_tag "main" %>
+    
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB_cu9OrYJTPnwqInN975RpMhNBrd2Xie8&sensor=true">
     </script>
 	<script src="https://apis.google.com/js/client.js?onload=OnLoadCallback"></script>
+	
   </head>
 <body onload="initialize()">
+  <div class="wrapper">
 	<div id="fb-root"></div>
 	<script>
 	  window.fbAsyncInit = function() {
@@ -47,6 +47,7 @@
 		<h3 id="plotting">Plotting where friends live ...</h3>
 	</div>
 	<br><br>
- 	<div id="map_canvas" style="width: 1024px; height: 760px;"></div>
+ 	<div id="map_canvas" style=""></div>
+  </div>
 </body>
 </html>
