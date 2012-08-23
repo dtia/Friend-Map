@@ -51,6 +51,7 @@ function main() {
 			// plot on map
 			addMarkersForLocations(locations);
 			document.getElementById("showfriendsbutton").style.visibility = 'visible';
+			document.getElementById("plotting").style.visibility = 'hidden';
 		})
 	});
 }
