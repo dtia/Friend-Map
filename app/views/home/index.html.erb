@@ -39,15 +39,20 @@
 	
 	
 	<h1>Where do my friends live around the world?</h1>
-	<div><h4>1) Login first on Facebook to access your friends' locations</h4></div>
-	<div class="fb-login-button"scope="user_location,friends_location,friends_checkins,friends_about_me">Login with Facebook</div>
-	<div><h4>2) Plot their locations on the map</h4></div>
-	<div>
-		<input type="button" value="Show friends on map" onclick="main()" id="showfriendsbutton">
+	<div class="row">
+	    <div class="buttonbox">
+	        <div class="fb-login-button" scope="user_location,friends_location,friends_checkins,friends_about_me" >Login with Facebook</div>
+	    </div>
+	    <div class="buttonbox">
+		    <input type="button" value="Show friends on map" onclick="main()" id="showfriendsbutton" class="button">
+	    </div>
+	</div>
+	<div class="row">
 		<h3 id="plotting">Plotting where friends live ...</h3>
 	</div>
-	<br><br>
- 	<div id="map_canvas" style=""></div>
+	<div class="row">
+     	<div id="map_canvas" style=""></div>
+     </div>
   </div>
 </body>
 </html>

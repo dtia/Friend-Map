@@ -13,7 +13,6 @@ function addMarkersForLocations(locations) {
 }
 
 function main() {
-	document.getElementById("showfriendsbutton").style.visibility = 'hidden';
 	document.getElementById("plotting").style.visibility = 'visible';
 	
 	// get friends list
@@ -57,7 +56,6 @@ function main() {
        				});
 				}
     	  });
-		  document.getElementById("showfriendsbutton").style.visibility = 'visible';
 		  document.getElementById("plotting").style.visibility = 'hidden';
 	});
 }
