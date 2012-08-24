@@ -16,6 +16,12 @@ class Location < ActiveRecord::Base
     location.save
   end
   
+  def self.get_location_coordinates(city)
+    locations = Location.where("city = ?", city)
+    location = locations[0]
+    return {:city => city, :lat => location.lat, :lng => location.lng}
+  end
+  
   def self.get_geocode(city)
     url = URI.parse('http://maps.googleapis.com/maps/api/geocode/json')
     http_url = url.path + '?address=%s&sensor=true' % format_query(city)

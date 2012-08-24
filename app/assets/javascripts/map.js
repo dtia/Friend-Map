@@ -11,6 +11,16 @@ function initialize() {
   map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 }
 
+function addMarker(city, lat, lng) {
+	var latLng = new google.maps.LatLng(lat,lng);
+	var marker = new google.maps.Marker({
+          	map: map,
+          	position: latLng,
+			title: city
+	});
+}
+
+// Here in case we need an on-the-fly call to an address / marker mapping
 function codeAddress(address) {
   geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
