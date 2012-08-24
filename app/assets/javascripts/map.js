@@ -30,7 +30,8 @@ function codeAddress(address) {
 			title: address
       });
     }
-	else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+	else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT ||
+			status == google.maps.GeocoderStatus.ZERO_RESULTS) {
 		setTimeout(function() {
 			codeAddress(address);
 		}, 200);	
