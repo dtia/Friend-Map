@@ -42,3 +42,6 @@ end
 
 # To use debugger
 # gem 'debugger'
+
+#gem 'yajl-ruby'
+gem 'json'

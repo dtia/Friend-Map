@@ -16,7 +16,9 @@ function getFriendsLocations(friendsList, callback) {
 			if (locationObject) {
 				city = response.location.name;
 				if (city != null && locations.indexOf(city) == -1) {
-					locations.push(city);
+					var val = {};
+					val.city = city;
+					locations.push(val);
 				}
 			}
 			currCount += 1;
@@ -33,9 +35,16 @@ function compileFriendsList(locations, currCount, maxFriends, callback) {
 
 function addMarkersForLocations(locations) {
 	console.log('geocoding locations and adding markers...');
-	for(var i=0; i<locations.length; i++) {
-		codeAddress(locations[i]);
-	}
+	console.log(JSON.stringify(locations));
+	
+	$.ajax({
+	    url: "/locations",
+	    type: "POST",
+	    data: {locations: JSON.stringify(locations)},
+	    success: function(resp){
+			console.log('locations posted');
+		}
+	});
 }
 
 function main() {
