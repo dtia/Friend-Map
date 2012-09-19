@@ -40,6 +40,7 @@ function main() {
 			var batchData = [];
 			
 			for (var i=0; i<friendsList.length; i++) {
+//			for (var i=0; i<100; i++) {
 				var request = new Object(); 
 				request.method = 'GET';
 				request.relative_url = '/' + friendList[i].id + '?fields=location';
