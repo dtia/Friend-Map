@@ -21,3 +21,32 @@ body { color: #5df; font-family: 'Exo', sans-serif; background: #000; height: 10
 }
 
 .row { clear: both }
+
+.infoboxText {
+	background-color: White;
+	border-style:solid;
+	border-width:medium; 
+	border-color:DarkOrange; 
+	width:240px;
+	color: black;
+}
+
+.infoboxDescription {
+	background-color: White; 
+	position:absolute; 
+	top:30px; 
+	left:10px; 
+	width:220px;
+	font-size: 14px;
+	margin-top: 8px;
+}
+
+.infoboxTitle {
+	background-color: White; 
+	position:absolute; 
+	top:10px; 
+	left:10px; 
+	width:220px;
+	font-size: 18px;
+	padding-bottom: 4px;
+}

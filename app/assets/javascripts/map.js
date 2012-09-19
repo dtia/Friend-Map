@@ -30,43 +30,8 @@ function GetMap()
 // 	});
 // }
 
-function addBox() {
-	var myOptions = {
-             content: boxText
-            ,disableAutoPan: false
-            ,maxWidth: 0
-            ,pixelOffset: new google.maps.Size(-140, 0)
-            ,zIndex: null
-            ,boxStyle: { 
-              background: "url('tipbox.gif') no-repeat"
-              ,opacity: 0.75
-              ,width: "280px"
-             }
-            ,closeBoxMargin: "10px 2px 2px 2px"
-            ,closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"
-            ,infoBoxClearance: new google.maps.Size(1, 1)
-            ,isHidden: false
-            ,pane: "floatPane"
-            ,enableEventPropagation: false
-    };
-
-	var boxText = document.createElement("div");
-    boxText.style.cssText = "border: 1px solid black; margin-top: 8px; background: yellow; padding: 5px;";
-    boxText.innerHTML = "City Hall, Sechelt<br>British Columbia<br>Canada";
-
-	var latlng = new google.maps.LatLng(55.672962361614566, 12.56587028503418);
-	var marker = new google.maps.Marker({
-		map: map,
-		position: latlng,
-		title: "address"
-	});
-
-	var ib = new InfoBox(myOptions);
-	ib.open(map,this);
-}
-
 // Here in case we need an on-the-fly call to an address / marker mapping
-function codeAddress(address) {
+function codeAddress(address, residents) {
 	
 	geocoder.geocode( { 'address': address}, function(results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
@@ -76,12 +41,20 @@ function codeAddress(address) {
 		var loc = new Microsoft.Maps.Location(lat, lng);
 		var pin = new Microsoft.Maps.Pushpin(loc, {text: ''});
 		
+		
+		var infoboxOptions = {
+			//title: address,
+			//description: '' + residents,
+			visible: false, 
+			offset: new Microsoft.Maps.Point(10,20),
+			htmlContent:'<div class="infoboxText">' +
+			'<span class="infoboxTitle">' + address + '</span>' +
+			'<span class="infoboxDescription">' + residents + '</span></div>'}; 
+			
+		//var infoboxOptions = {width :200, height :100, showCloseButton: true, zIndex: 0, offset:new Microsoft.Maps.Point(10,0), showPointer: true, htmlContent:'<b>Custom HTML</b>'};
+		
 		// Create the infobox for the pushpin
-        var pinInfobox = new Microsoft.Maps.Infobox(pin.getLocation(), 
-        {title: address,
-         description: 'Friends living in ' + address,
-         visible: false, 
-         offset: new Microsoft.Maps.Point(0,15)});
+        var pinInfobox = new Microsoft.Maps.Infobox(pin.getLocation(), infoboxOptions);
 
 		 // Add handler for the pushpin click event.
          Microsoft.Maps.Events.addHandler(pin, 'click', function displayInfobox(e)

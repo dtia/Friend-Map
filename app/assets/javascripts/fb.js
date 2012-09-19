@@ -22,8 +22,16 @@ function addMarkersForLocations(locations) {
 	// 			}
 	// 		}
 	// 	});
-	for(var i=0; i<locations.length; i++) {
-		codeAddress(locations[i].city);
+	// for(var i=0; i<locations.length; i++) {
+	// 	codeAddress(locations[i].city);
+	// }
+	
+	for(key in locations){
+	  if(locations.hasOwnProperty(key)){
+		val = locations[key];
+		codeAddress(key, val);
+	    //console.log("key = " + key + ", value = " + locations[key]);
+	  }
 	}
 }
 
@@ -43,7 +51,7 @@ function main() {
 //			for (var i=0; i<100; i++) {
 				var request = new Object(); 
 				request.method = 'GET';
-				request.relative_url = '/' + friendList[i].id + '?fields=location';
+				request.relative_url = '/' + friendList[i].id + '?fields=location,name';
 				batchData.push(request); 
 			
 				// need to break up batches into size 50, which is facebook's batch limit
@@ -53,7 +61,7 @@ function main() {
 				}
 			}
 						
-			var locations = [];
+			var locations = {};
     	   	for (var i = 0; i < batches.length; i++) {
        			FB.api("/", "POST", 
        				{ access_token: loginStatusResponse.authResponse.accessToken, batch: batches[i] }, 
@@ -61,11 +69,23 @@ function main() {
 						for (var i = 0; i < response.length; i++) {
         					locationObject = JSON.parse(response[i].body).location;
         					if (locationObject) {
+								name = JSON.parse(response[i].body).name;
 								city = locationObject.name;
 								if (city != null && !containsCity(locations, city)) {
 									var val = {};
 									val.city = city;
-									locations.push(val);
+									
+									var nameList = null;
+									if (locations[city] != null) {
+										// retrieve list of users first
+										nameList = locations[city];
+									}
+									else {
+										nameList = [];
+									}
+									
+									nameList.push(name);
+									locations[city] = nameList;
 								}
 							}
         				}  
