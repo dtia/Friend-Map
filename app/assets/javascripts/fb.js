@@ -5,36 +5,7 @@ function getFriendsList(callback) {
 	});
 }
 
-function addMarkersForLocations(locations) {
-	console.log('geocoding locations and adding markers...');
-	// $.ajax({
-	// 	    url: "/locations",
-	// 	    type: "POST",
-	// 	    data: {locations: JSON.stringify(locations)},
-	// 	    success: function(resp){
-	// 			console.log('locations posted');
-	// 			console.log(resp);
-	// 			if (resp) {
-	// 				for (var i=0; i < resp.length; i++) {
-	// 					//location = resp[1];
-	// 					//addMarker(location.city, location.lat, location.lng);
-	// 				}	
-	// 			}
-	// 		}
-	// 	});
-	// for(var i=0; i<locations.length; i++) {
-	// 	codeAddress(locations[i].city);
-	// }
-	
-	for(key in locations){
-	  if(locations.hasOwnProperty(key)){
-		val = locations[key];
-		codeAddress(key, val);
-	    //console.log("key = " + key + ", value = " + locations[key]);
-	  }
-	}
-}
-
+locations = {}; // TODO: this needs to be fixed
 function main() {
 	document.getElementById("plotting").style.visibility = 'visible';
 	
@@ -48,7 +19,7 @@ function main() {
 			var batchData = [];
 			
 			for (var i=0; i<friendsList.length; i++) {
-//			for (var i=0; i<100; i++) {
+//			for (var i=0; i<151; i++) {
 				var request = new Object(); 
 				request.method = 'GET';
 				request.relative_url = '/' + friendList[i].id + '?fields=location,name';
@@ -61,7 +32,6 @@ function main() {
 				}
 			}
 						
-			var locations = {};
     	   	for (var i = 0; i < batches.length; i++) {
        			FB.api("/", "POST", 
        				{ access_token: loginStatusResponse.authResponse.accessToken, batch: batches[i] }, 
@@ -71,9 +41,9 @@ function main() {
         					if (locationObject) {
 								name = JSON.parse(response[i].body).name;
 								city = locationObject.name;
-								if (city != null && !containsCity(locations, city)) {
-									var val = {};
-									val.city = city;
+								if (city != null) {
+									// var val = {};
+									// val.city = city;
 									
 									var nameList = null;
 									if (locations[city] != null) {
@@ -89,20 +59,11 @@ function main() {
 								}
 							}
         				}  
-        				addMarkersForLocations(locations);        				 
+        				addMarkersForLocations(locations);  
+						//console.log(locations);
        				});
 				}
     	  });
 		  document.getElementById("plotting").style.visibility = 'hidden';
 	});
-}
-
-function containsCity(arr, val) {
-	for(var i=0; i<arr.length; i++) {
-		curr = arr[i];
-		if (curr.city === val) {
-			return true;
-		}
-	}
-	return false;
 }
