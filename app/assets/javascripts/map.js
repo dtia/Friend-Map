@@ -73,7 +73,7 @@ function geocodeAndAddPin(address, residents) {
 			 // Add handler for the pushpin click event.
 	         Microsoft.Maps.Events.addHandler(pin, 'click', function displayInfobox(e)
 				{
-					this.setOptions({ visible:true });
+					this.setOptions({ visible:!this.getVisible() });
 				}.bind(pinInfobox));
 
 	         // Hide the infobox when the map is moved.
