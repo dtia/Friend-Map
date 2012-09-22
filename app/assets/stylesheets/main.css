@@ -24,6 +24,7 @@ body { color: #5df; font-family: 'Exo', sans-serif; background: #000; height: 10
 
 .infobox{
     position:relative;
+	z-index: 1;
     background-color:white;
     border:1px solid rgb(136, 136, 136);
     left:0px;
