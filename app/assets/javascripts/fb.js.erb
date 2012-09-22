@@ -18,8 +18,8 @@ function main() {
         	var batches = [];
 			var batchData = [];
 			
-//			for (var i=0; i<friendsList.length; i++) {
-			for (var i=0; i<100; i++) {
+			for (var i=0; i < <%= Settings.friends_list_length %>; i++) {
+//			for (var i=0; i<100; i++) {
 				var request = new Object(); 
 				request.method = 'GET';
 				request.relative_url = '/' + friendList[i].id + '?fields=location,name';

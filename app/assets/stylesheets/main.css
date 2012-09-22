@@ -22,31 +22,42 @@ body { color: #5df; font-family: 'Exo', sans-serif; background: #000; height: 10
 
 .row { clear: both }
 
-.infoboxText {
-	background-color: White;
-	border-style:solid;
-	border-width:medium; 
-	border-color:DarkOrange; 
-	width:240px;
+.infobox{
+    position:relative;
+    background-color:white;
+    border:1px solid rgb(136, 136, 136);
+    left:0px;
+    top:0px;
+    width:256px;
+}
+
+.infobox_close{
+    cursor:pointer;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    border:none;
+}
+
+.infobox_content{
+    margin:5px;
+    font-family: Arial;
+    font-size:13px;
+    line-height:22px;
 	color: black;
 }
 
-.infoboxDescription {
-	background-color: White; 
-	position:absolute; 
-	top:30px; 
-	left:10px; 
-	width:220px;
-	font-size: 14px;
-	margin-top: 8px;
+.infobox_pointer{
+    width:33px;
+    height:38px;
+    overflow:hidden;
+    position:relative;
+    z-index:1;
+    left:20px;
+    top:-1px;
 }
 
-.infoboxTitle {
-	background-color: White; 
-	position:absolute; 
-	top:10px; 
-	left:10px; 
-	width:220px;
-	font-size: 18px;
-	padding-bottom: 4px;
+.infobox_title{
+	font-size: 16px;
+	font-weight: bold;
 }
