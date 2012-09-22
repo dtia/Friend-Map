@@ -45,3 +45,4 @@ end
 
 #gem 'yajl-ruby'
 gem 'json'
+gem 'rails_config'

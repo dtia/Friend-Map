@@ -5,7 +5,7 @@ function getFriendsList(callback) {
 	});
 }
 
-locations = {}; // TODO: this needs to be fixed
+var locations = {};
 function main() {
 	document.getElementById("plotting").style.visibility = 'visible';
 	
@@ -42,9 +42,6 @@ function main() {
 								name = JSON.parse(response[i].body).name;
 								city = locationObject.name;
 								if (city != null) {
-									// var val = {};
-									// val.city = city;
-									
 									var nameList = null;
 									if (locations[city] != null) {
 										// retrieve list of users first
@@ -60,7 +57,6 @@ function main() {
 							}
         				}  
         				addMarkersForLocations(locations);  
-						//console.log(locations);
        				});
 				}
     	  });
