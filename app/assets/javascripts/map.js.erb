@@ -25,7 +25,7 @@ function initialize()
 	pushpinFrameHTML = '<div class="infobox"><div class="infobox_content">{content}</div></div><div class="infobox_pointer"><img src= <%= asset_path("pointer_shadow.png") %> /></div>';
 }
 
-// Here in case we need an on-the-fly call to an address / marker mapping
+// on-the-fly call for an address / marker mapping
 function addMarkersForLocations(locations) {
 	console.log('geocoding locations and adding markers...');
 	
@@ -39,6 +39,7 @@ function addMarkersForLocations(locations) {
 	}
 }
 
+var numFriends = 0;
 function geocodeAndAddPin(address, residents) {
 	geocoder.geocode( { 'address': address}, function(results, status) {
     	if (status == google.maps.GeocoderStatus.OK) {
@@ -72,6 +73,9 @@ function geocodeAndAddPin(address, residents) {
 
 			map.entities.push(pin);
 			map.entities.push(pinInfobox);
+			
+			numFriends += residents.length;
+			document.getElementById("current_friends").innerHTML = numFriends;
 
 	    }
 		else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT ||

@@ -20,6 +20,12 @@ body { color: #5df; font-family: 'Exo', sans-serif; background: #000; height: 10
 
 }
 
+#progress_count {
+	visibility: hidden;
+	margin-bottom: 10px;
+	font-size: 18px;
+}
+
 .row { clear: both }
 
 .infobox{

@@ -7,16 +7,19 @@ function getFriendsList(callback) {
 
 var locations = {};
 function main() {
-	document.getElementById("plotting").style.visibility = 'visible';
-	
-	// get friends list
+	<% Settings.reload! %>
+
 	// get friends' locations
 	console.log('getting friends locations');
+	document.getElementById("progress_count").style.visibility = 'visible';
+	
 	getFriendsList(function(friendsList) {
 		
     	FB.getLoginStatus(function(loginStatusResponse) {
         	var batches = [];
 			var batchData = [];
+
+			document.getElementById("total_friends").innerHTML = <%= Settings.friends_list_length %>;
 			
 			for (var i=0; i < <%= Settings.friends_list_length %>; i++) {
 				var request = new Object(); 
@@ -30,7 +33,7 @@ function main() {
 				   	batchData = [];
 				}
 			}
-						
+			
     	   	for (var i = 0; i < batches.length; i++) {
        			FB.api("/", "POST", 
        				{ access_token: loginStatusResponse.authResponse.accessToken, batch: batches[i] }, 
@@ -55,10 +58,9 @@ function main() {
 								}
 							}
         				}  
-        				addMarkersForLocations(locations);  
+        				addMarkersForLocations(locations); 
        				});
 				}
     	  });
-		  document.getElementById("plotting").style.visibility = 'hidden';
 	});
 }
