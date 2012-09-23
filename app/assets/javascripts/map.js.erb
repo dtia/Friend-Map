@@ -39,7 +39,6 @@ function addMarkersForLocations(locations) {
 	}
 }
 
-var numFriends = 0;
 function geocodeAndAddPin(address, residents) {
 	geocoder.geocode( { 'address': address}, function(results, status) {
     	if (status == google.maps.GeocoderStatus.OK) {
@@ -74,9 +73,7 @@ function geocodeAndAddPin(address, residents) {
 			map.entities.push(pin);
 			map.entities.push(pinInfobox);
 			
-			numFriends += residents.length;
-			document.getElementById("current_friends").innerHTML = numFriends;
-
+			//document.getElementById("current_friends").innerHTML = numFriends;
 	    }
 		else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT ||
 				status == google.maps.GeocoderStatus.ZERO_RESULTS) {
