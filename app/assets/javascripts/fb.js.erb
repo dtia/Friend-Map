@@ -41,20 +41,26 @@ function main() {
 						for (var i = 0; i < response.length; i++) {
         					locationObject = JSON.parse(response[i].body).location;
         					if (locationObject) {
+	
+								id = JSON.parse(response[i].body).id;
 								name = JSON.parse(response[i].body).name;
 								city = locationObject.name;
 								if (city != null) {
-									var nameList = null;
+									var userInfoList = null;
+									var userInfo = {};
+									userInfo.id = id;
+									userInfo.name = name;
+									
 									if (locations[city] != null) {
 										// retrieve list of users first
-										nameList = locations[city];
+										userInfoList = locations[city];
 									}
 									else {
-										nameList = [];
+										userInfoList = [];
 									}
 									
-									nameList.push(name);
-									locations[city] = nameList;
+									userInfoList.push(userInfo);
+									locations[city] = userInfoList;
 								}
 							}
         				}  

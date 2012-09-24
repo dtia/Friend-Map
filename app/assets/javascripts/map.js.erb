@@ -31,15 +31,13 @@ function addMarkersForLocations(locations) {
 	
 	for(address in locations){
 		if(locations.hasOwnProperty(address)){
-			residents = locations[address];
-			if (typeof residents !== "undefined") {
-				geocodeAndAddPin(address, residents);
-			}
+			userInfoList = locations[address];
+			geocodeAndAddPin(address, userInfoList);
 		}
 	}
 }
 
-function geocodeAndAddPin(address, residents) {
+function geocodeAndAddPin(address, userInfoList) {
 	geocoder.geocode( { 'address': address}, function(results, status) {
     	if (status == google.maps.GeocoderStatus.OK) {
 			var lat = results[0].geometry.location.Xa;
@@ -47,7 +45,7 @@ function geocodeAndAddPin(address, residents) {
 			var loc = new Microsoft.Maps.Location(lat, lng);
 			var pin = new Microsoft.Maps.Pushpin(loc);
 			pin.title = address;
-			pin.description = residents;
+			pin.description = userInfoList;
 			pinLayer.push(pin);
 			
 			// Create the infobox for the pushpin
@@ -78,7 +76,7 @@ function geocodeAndAddPin(address, residents) {
 		else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT ||
 				status == google.maps.GeocoderStatus.ZERO_RESULTS) {
 			setTimeout(function() {
-				geocodeAndAddPin(address, residents);
+				geocodeAndAddPin(address, userInfoList);
 			}, 200);	
 		}
 		else {
@@ -94,7 +92,7 @@ function displayInfobox(e)
 		currentPinInfobox = this;
 		
 		var pin = e.target;
-		var html = "<span class='infobox_title'>" + pin.title + "</span><br/>" + pin.description;
+		var html = "<span class='infobox_title'>" + pin.title + "</span><br/>" + getFriendProfileLinks(pin.description);
 
 		this.setOptions({
 			visible:!this.getVisible(),
@@ -105,8 +103,19 @@ function displayInfobox(e)
 		//set location of infobox
 		this.setLocation(pin.getLocation());
     }
+}
 
-}                    
+function getFriendProfileLinks(userInfoList) {
+	markupString = '';
+	
+	for (var i=0; i<userInfoList.length; i++) {
+		userInfo = userInfoList[i];
+		link = '<a href="http://www.facebook.com/' + userInfo.id + '" target="_blank" >' + userInfo.name + '</a><br/>';
+		markupString += link;
+	}
+	
+	return markupString;
+}
 
 function hideInfobox()
 {
