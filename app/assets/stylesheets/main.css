@@ -70,3 +70,11 @@ body { color: #5df; font-family: 'Exo', sans-serif; background: #000; height: 10
 	font-size: 16px;
 	font-weight: bold;
 }
+
+.profile_pic {
+	margin: 1px 10px 1px 0;
+	width: 40px;
+	vertical-align: middle;
+	border: solid;
+	border-width: 1px;
+}
