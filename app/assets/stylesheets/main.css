@@ -36,6 +36,8 @@ body { color: #5df; font-family: 'Exo', sans-serif; background: #000; height: 10
     left:0px;
     top:0px;
     width:256px;
+	max-height:300px;
+	overflow: auto;
 }
 
 .infobox_close{
