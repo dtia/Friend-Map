@@ -32,7 +32,6 @@ function addMarkersForLocations(locations) {
 	for(address in locations){
 		if(locations.hasOwnProperty(address)){
 			userInfoList = locations[address];
-			console.log(userInfoList);
 			geocodeAndAddPin(address, userInfoList);
 		}
 	}
@@ -56,12 +55,11 @@ function geocodeAndAddPin(address, userInfoList) {
 
 			 // Add handler for the pushpin click event.
 	         Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox.bind(pinInfobox));
-
-	         // Hide the infobox when the map is moved.
-	         Microsoft.Maps.Events.addHandler(map, 'viewchange', function displayInfobox(e)
-				{
-					this.setOptions({ visible:false });
-				}.bind(pinInfobox));
+	
+			// Center map when marker is clicked
+	         Microsoft.Maps.Events.addHandler(pin, 'click', function centerMap(e) {
+				map.setView({center: new Microsoft.Maps.Location(lat, lng)});
+			});
 				
 			// Hide infobox when anywhere on map is clicked
 			Microsoft.Maps.Events.addHandler(map, 'click', function displayInfobox(e)
@@ -94,7 +92,7 @@ function displayInfobox(e)
 		
 		var pin = e.target;
 		var html = "<span class='infobox_title'>" + pin.title + "</span><br/>" + getFriendProfileLinks(pin.description);
-
+		
 		this.setOptions({
 			visible:!this.getVisible(),
 			offset: new Microsoft.Maps.Point(-33,20),
