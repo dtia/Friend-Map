@@ -1,10 +1,3 @@
-function getFriendsList(callback) {
-	FB.api('/me/friends', function(response) {
-		friendList = response.data;
-		callback(friendList);
-	});
-}
-
 var locations = {};
 function main() {
 	<% Settings.reload! %>
@@ -13,62 +6,42 @@ function main() {
 	console.log('getting friends locations');
 	//document.getElementById("progress_count").style.visibility = 'visible';
 	
-	getFriendsList(function(friendsList) {
+   	FB.getLoginStatus(function(loginStatusResponse) {
+		var access_token = loginStatusResponse.authResponse.accessToken;
+		var query = 'SELECT uid, name, pic_square, current_location FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND current_location != \'\'';
+		var url = encodeURI('https://graph.facebook.com/fql?q=' + query + '&access_token=' + access_token);
 		
-    	FB.getLoginStatus(function(loginStatusResponse) {
-        	var batches = [];
-			var batchData = [];
+		//document.getElementById("total_friends").innerHTML = <%= Settings.friends_list_length %>;		
+		
+		$.get(url).complete(function(resp) { 
+			data = JSON.parse(resp.responseText).data;
 
-			document.getElementById("total_friends").innerHTML = <%= Settings.friends_list_length %>;
-			
-			for (var i=0; i < <%= Settings.friends_list_length %>; i++) {
-				var request = new Object(); 
-				request.method = 'GET';
-				request.relative_url = '/' + friendList[i].id + '?fields=location,name,picture';
-				batchData.push(request); 
-			
-				// need to break up batches into size 50, which is facebook's batch limit
-				if (i % 50 == 0) {
-				   	batches.push(batchData);
-				   	batchData = [];
+			for (var i=0; i < data.length; i++) {
+				uid = data[i].uid;
+				name = data[i].name;
+				pic = data[i].pic_square;
+				city = data[i].current_location.name;
+				
+				var userInfo = {};
+				userInfo.uid = uid;
+				userInfo.name = name;
+				userInfo.pic = pic;
+				userInfo.city = city;
+				
+				var userInfoList;
+				if (locations[city] !== undefined) {
+					// retrieve list of users first
+					userInfoList = locations[city];
 				}
+				else {
+					userInfoList = [];
+				}
+
+				userInfoList.push(userInfo);
+				locations[city] = userInfoList;				
 			}
 			
-    	   	for (var i = 0; i < batches.length; i++) {
-       			FB.api("/", "POST", 
-       				{ access_token: loginStatusResponse.authResponse.accessToken, batch: batches[i] }, 
-        			function(response) {
-						for (var i = 0; i < response.length; i++) {
-        					locationObject = JSON.parse(response[i].body).location;
-        					if (locationObject) {
-	
-								id = JSON.parse(response[i].body).id;
-								name = JSON.parse(response[i].body).name;
-								pic = JSON.parse(response[i].body).picture.data.url;
-								city = locationObject.name;
-								if (city != null) {
-									var userInfoList = null;
-									var userInfo = {};
-									userInfo.id = id;
-									userInfo.name = name;
-									userInfo.pic = pic;
-									
-									if (locations[city] != null) {
-										// retrieve list of users first
-										userInfoList = locations[city];
-									}
-									else {
-										userInfoList = [];
-									}
-									
-									userInfoList.push(userInfo);
-									locations[city] = userInfoList;
-								}
-							}
-        				}  
-        				addMarkersForLocations(locations); 
-       				});
-				}
-    	  });
+			addMarkersForLocations(locations);
+		});		
 	});
 }

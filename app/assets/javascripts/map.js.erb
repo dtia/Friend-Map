@@ -28,10 +28,11 @@ function initialize()
 // on-the-fly call for an address / marker mapping
 function addMarkersForLocations(locations) {
 	console.log('geocoding locations and adding markers...');
-	
+
 	for(address in locations){
 		if(locations.hasOwnProperty(address)){
 			userInfoList = locations[address];
+			console.log(userInfoList);
 			geocodeAndAddPin(address, userInfoList);
 		}
 	}
@@ -110,7 +111,7 @@ function getFriendProfileLinks(userInfoList) {
 	
 	for (var i=0; i<userInfoList.length; i++) {
 		userInfo = userInfoList[i];
-		link = '<a href="http://www.facebook.com/' + userInfo.id + '" target="_blank" ><img class="profile_pic" src="' + userInfo.pic + '" />' + userInfo.name + '</a><br/>';
+		link = '<a href="http://www.facebook.com/' + userInfo.uid + '" target="_blank" ><img class="profile_pic" src="' + userInfo.pic + '" />' + userInfo.name + '</a><br/>';
 		markupString += link;
 	}
 	
