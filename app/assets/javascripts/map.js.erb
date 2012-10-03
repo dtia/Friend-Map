@@ -25,63 +25,52 @@ function initialize()
 	pushpinFrameHTML = '<div class="infobox"><div class="infobox_content">{content}</div></div><div class="infobox_pointer"><img src= <%= asset_path("pointer_shadow.png") %> /></div>';
 }
 
-// on-the-fly call for an address / marker mapping
-function addMarkersForLocations(locations) {
-	console.log('geocoding locations and adding markers...');
+function addMarkersOnMapForLocations(locations) {
+	console.log('adding markers...');
 
 	for(address in locations){
 		if(locations.hasOwnProperty(address)){
-			userInfoList = locations[address];
-			geocodeAndAddPin(address, userInfoList);
+			locationInfo = locations[address];
+ 			userInfoList = locationInfo.userInfoList;
+			addMarkersOnMap(locationInfo.loc, userInfoList);
 		}
 	}
 }
 
-function geocodeAndAddPin(address, userInfoList) {
-	geocoder.geocode( { 'address': address}, function(results, status) {
-    	if (status == google.maps.GeocoderStatus.OK) {
-			var lat = results[0].geometry.location.Xa;
-			var lng = results[0].geometry.location.Ya;
-			var loc = new Microsoft.Maps.Location(lat, lng);
-			var pin = new Microsoft.Maps.Pushpin(loc);
-			pin.title = address;
-			pin.description = userInfoList;
-			pinLayer.push(pin);
-			
-			// Create the infobox for the pushpin
-	        var pinInfobox = new Microsoft.Maps.Infobox(pin.getLocation(), {visible:false});
-			infoboxLayer.push(pinInfobox);
-			currentPinInfobox = pinInfobox;
-
-			 // Add handler for the pushpin click event.
-	         Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox.bind(pinInfobox));
+function addMarkersOnMap(location, userInfoList) {
+	var loc = new Microsoft.Maps.Location(location.latitude, location.longitude);
+	var pin = new Microsoft.Maps.Pushpin(loc);
+	pin.title = location.address;
+	pin.description = userInfoList;
+	pinLayer.push(pin);
 	
-			// Center map when marker is clicked
-	         Microsoft.Maps.Events.addHandler(pin, 'click', function centerMap(e) {
-				map.setView({center: new Microsoft.Maps.Location(lat, lng)});
-			});
-				
-			// Hide infobox when anywhere on map is clicked
-			Microsoft.Maps.Events.addHandler(map, 'click', function displayInfobox(e)
-				{
-					this.setOptions({ visible:false });
-				}.bind(pinInfobox));
+	// Create the infobox for the pushpin
+    var pinInfobox = new Microsoft.Maps.Infobox(pin.getLocation(), {visible:false});
+	infoboxLayer.push(pinInfobox);
+	currentPinInfobox = pinInfobox;
 
-			map.entities.push(pin);
-			map.entities.push(pinInfobox);
-			
-			//document.getElementById("current_friends").innerHTML = numFriends;
-	    }
-		else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT ||
-				status == google.maps.GeocoderStatus.ZERO_RESULTS) {
-			setTimeout(function() {
-				geocodeAndAddPin(address, userInfoList);
-			}, 200);	
-		}
-		else {
-	      alert("Geocode was not successful for the following reason: " + status);
-	    }
-  });
+	 // Add handler for the pushpin click event.
+    Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox.bind(pinInfobox));
+
+	// Center map when marker is clicked
+    Microsoft.Maps.Events.addHandler(pin, 'click', function centerMap(e) {
+		map.setView({center: new Microsoft.Maps.Location(location.latitude, location.longitude)});
+	});
+		
+     // Hide the infobox when the map is moved.
+     // Microsoft.Maps.Events.addHandler(map, 'viewchangestart', function displayInfobox(e)
+     //      {
+     //     	this.setOptions({ visible:false });
+     // 	 }.bind(pinInfobox));
+		
+	// Hide infobox when anywhere on map is clicked
+	Microsoft.Maps.Events.addHandler(map, 'click', function displayInfobox(e)
+	{
+		this.setOptions({ visible:false });
+	}.bind(pinInfobox));
+
+	map.entities.push(pin);
+	map.entities.push(pinInfobox);
 }
 
 function displayInfobox(e)
@@ -125,23 +114,39 @@ function replaceWhiteSpace(str) {
 	return str.replace(/\s/g,'').replace(/\,/g,''); 
 }
 
-// function addMarkersForLocations(locations) {
-// 	$.ajax({
-// 		    url: "/locations",
-// 		    type: "POST",
-// 		    data: {locations: JSON.stringify(locations)},
-// 		    success: function(resp){
-// 				console.log('locations posted');
-// 				console.log(resp);
-// 				if (resp) {
-// 					for (var i=0; i < resp.length; i++) {
-// 						//location = resp[1];
-// 						//addMarker(location.city, location.lat, location.lng);
-// 					}	
-// 				}
-// 			}
-// 		});
-// 	for(var i=0; i<locations.length; i++) {
-// 		codeAddress(locations[i].city);
-// 	}
-// }
+function addMarkersForLocations(locations) {
+	var addresses = [];
+	for(address in locations){
+		if(locations.hasOwnProperty(address)){
+			addresses.push(address);
+		}
+	}
+	
+	$.ajax({
+		    url: "/locations",
+		    type: "POST",
+		    data: {locations: JSON.stringify(addresses)},
+		    success: function(resp){
+				console.log('locations posted');
+				if (resp) {
+					for (var i=0; i<resp.length; i++) {
+						loc = resp[i];
+						addCoordsToLocation(locations, loc);
+					}	
+					addMarkersOnMapForLocations(locations);
+				}
+			}
+		});
+}
+
+function addCoordsToLocation(locations, locationCoords) {
+	city = locationCoords.address;
+	if (locations[city] != null) {
+		userInfoList = locations[city];
+
+		var locationInfo = {};
+		locationInfo.loc = locationCoords;
+		locationInfo.userInfoList = userInfoList;
+		locations[city] = locationInfo;
+	}
+}

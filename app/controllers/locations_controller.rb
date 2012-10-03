@@ -1,25 +1,22 @@
 class LocationsController < ApplicationController
   def index
-    
   end
   
   def create
       coords_for_map = []
-      locations_json = params[:locations]
+      locations_json = params[:locations]      
       @locations = ActiveSupport::JSON.decode(locations_json)
       @locations.each do |location|
-        city = location["city"]
-        
-        if !Location.location_stored(city)
-          coords = Location.get_geocode(city)
-          lat = coords["lat"]
-          lng = coords["lng"]
-          Location.add_location_coordinates(city, lat, lng)          
+        if !Location.location_stored(location)
+          coords = Location.add_location_coordinates(location)
         end
         
-        coords_for_map.push(Location.get_location_coordinates(city))
+        coords_for_map.push(Location.get_location_coordinates(location))
       end
       
-      render :json => coords_for_map
+      respond_to do |format|
+        format.json { render json: coords_for_map }
+      end      
   end
+  
 end
