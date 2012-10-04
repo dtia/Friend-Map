@@ -65,7 +65,7 @@ function addMarkersOnMap(location, userInfoList) {
 
 	var loc = new Microsoft.Maps.Location(location.latitude, location.longitude);
 	var pin = new Microsoft.Maps.Pushpin(loc);
-	pin.title = location.address;
+	pin.title = getTitle(location, userInfoList);
 	pin.description = userInfoList;
 	pinLayer.push(pin);
 	
@@ -77,17 +77,6 @@ function addMarkersOnMap(location, userInfoList) {
 	 // Add handler for the pushpin click event.
     Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox.bind(pinInfobox));
 
-	// Center map when marker is clicked
-    Microsoft.Maps.Events.addHandler(pin, 'click', function centerMap(e) {
-		map.setView({center: new Microsoft.Maps.Location(location.latitude, location.longitude)});
-	});
-		
-     // Hide the infobox when the map is moved.
-     // Microsoft.Maps.Events.addHandler(map, 'viewchangestart', function displayInfobox(e)
-     //      {
-     //     	this.setOptions({ visible:false });
-     // 	 }.bind(pinInfobox));
-		
 	// Hide infobox when anywhere on map is clicked
 	Microsoft.Maps.Events.addHandler(map, 'click', function displayInfobox(e)
 	{
@@ -96,6 +85,16 @@ function addMarkersOnMap(location, userInfoList) {
 
 	map.entities.push(pin);
 	map.entities.push(pinInfobox);
+}
+
+function getTitle(location, userInfoList) {
+	address = location.address;
+
+	if (userInfoList.length > 5) {
+		address += ' (' + userInfoList.length + ')';
+	}
+	
+	return address;
 }
 
 function getFriendProfileLinks(userInfoList) {
@@ -108,11 +107,6 @@ function getFriendProfileLinks(userInfoList) {
 	}
 	
 	return markupString;
-}
-
-function hideInfobox()
-{
-	this.setOptions({ visible: false });
 }
 
 function replaceWhiteSpace(str) {
