@@ -24,7 +24,7 @@ class Location < ActiveRecord::Base
     end
 
     def self.add_location_coordinates(address)
-      add_location_coordinates_with_reps(address, 3)
+      add_location_coordinates_with_reps(address, 5)
     end
     
     def self.add_location_coordinates_with_reps(address, num)
