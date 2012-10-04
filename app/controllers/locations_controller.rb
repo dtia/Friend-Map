@@ -8,10 +8,15 @@ class LocationsController < ApplicationController
       @locations = ActiveSupport::JSON.decode(locations_json)
       @locations.each do |location|
         if !Location.location_stored(location)
-          coords = Location.add_location_coordinates(location)
+          Location.add_location_coordinates(location)
         end
         
-        coords_for_map.push(Location.get_location_coordinates(location))
+        if !location.eql?("undefined")
+          coords = Location.get_location_coordinates(location)
+          if !coords.nil? 
+            coords_for_map.push(coords)
+          end
+        end
       end
       
       respond_to do |format|

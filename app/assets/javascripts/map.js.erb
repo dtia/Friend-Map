@@ -38,6 +38,9 @@ function addMarkersOnMapForLocations(locations) {
 }
 
 function addMarkersOnMap(location, userInfoList) {
+	if(typeof location === 'undefined')
+		return;
+
 	var loc = new Microsoft.Maps.Location(location.latitude, location.longitude);
 	var pin = new Microsoft.Maps.Pushpin(loc);
 	pin.title = location.address;
