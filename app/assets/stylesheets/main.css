@@ -4,6 +4,8 @@ body { color: #5df; font-family: 'Exo', sans-serif; background: #000; height: 10
 
 #mapDiv { width: 800px; height: 600px; position: absolute; }
 
+#statusMessage { display: none }
+
 .wrapper {  width: 820px; margin-left: auto ;margin-right: auto ; }
 
 .buttonbox { float: left; margin: 10px }

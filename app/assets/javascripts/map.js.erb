@@ -27,7 +27,9 @@ function initialize()
 
 function addMarkersOnMapForLocations(locations) {
 	console.log('adding markers...');
-
+	
+	setStatusCount(locations);
+	
 	for(address in locations){
 		if(locations.hasOwnProperty(address)){
 			locationInfo = locations[address];
@@ -35,6 +37,26 @@ function addMarkersOnMapForLocations(locations) {
 			addMarkersOnMap(locationInfo.loc, userInfoList);
 		}
 	}
+}
+
+function setStatusCount(locations) {
+	cityCount = 0;
+	peopleCount = 0;
+	for(address in locations) {
+		cityCount++;
+		
+		if(locations.hasOwnProperty(address)){
+			locationInfo = locations[address];
+ 			userInfoList = locationInfo.userInfoList;
+			
+			if (typeof userInfoList !== "undefined")
+				peopleCount += userInfoList.length;
+		}
+	}
+	
+	$("#statusMessage").html(peopleCount + ' friends in ' + cityCount + ' cities');
+	
+	return cityCount;
 }
 
 function addMarkersOnMap(location, userInfoList) {

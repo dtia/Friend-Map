@@ -7,6 +7,8 @@ function main() {
 	
    	FB.getLoginStatus(function(loginStatusResponse) {
 		hideLoginButton();
+		showWaitingMessage("Finding your friends' locations on facebook ...");
+		
 		var access_token = loginStatusResponse.authResponse.accessToken;
 		var query = 'SELECT uid, name, pic_square, current_location FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND current_location != \'\'';
 		var url = encodeURI('https://graph.facebook.com/fql?q=' + query + '&access_token=' + access_token);
@@ -39,6 +41,7 @@ function main() {
 				locations[city] = userInfoList;				
 			}
 			
+			showWaitingMessage("Plotting friends on map ...");
 			addMarkersForLocations(locations);
 		});		
 	});
@@ -46,4 +49,9 @@ function main() {
 
 function hideLoginButton() {
 	$("#login-button-box").remove();
+}
+
+function showWaitingMessage(message) {
+	$("#statusMessage").show();
+	document.getElementById("statusMessage").innerHTML = message;
 }

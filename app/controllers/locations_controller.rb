@@ -21,7 +21,7 @@ class LocationsController < ApplicationController
       
       respond_to do |format|
         format.json { render json: coords_for_map }
-      end      
+      end
   end
   
 end
