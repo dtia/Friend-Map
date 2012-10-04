@@ -6,7 +6,7 @@ body { color: #5df; font-family: 'Exo', sans-serif; background: #000; height: 10
 
 .wrapper {  width: 820px; margin-left: auto ;margin-right: auto ; }
 
-.buttonbox { float: left; padding: 10px; }
+.buttonbox { float: left; margin: 10px }
 
 .button {
     border: 1px solid #000;
