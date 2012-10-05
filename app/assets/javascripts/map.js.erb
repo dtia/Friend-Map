@@ -22,7 +22,7 @@ function initialize()
 	pinLayer = new Microsoft.Maps.EntityCollection();
 	map.entities.push(pinLayer);
 	
-	pushpinFrameHTML = '<div class="infobox"><div class="infobox_content">{content}</div></div><div class="infobox_pointer"><img src= <%= asset_path("pointer_shadow.png") %> /></div>';
+	pushpinFrameHTML = '<div id="infobox" class="infobox"><div class="infobox_content">{content}</div></div><div class="infobox_pointer"><img src= <%= asset_path("pointer_shadow.png") %> /></div>';
 }
 
 function addMarkersOnMapForLocations(locations) {
@@ -166,6 +166,17 @@ function displayInfobox(e) {
 		});
 		
         this.setLocation(e.target.getLocation());
+
+
+		jQuery(document).ready(function(){
+			// Disable map Dragging when cursor enters infoBox div
+			jQuery("#infobox").live("mouseenter", function(){
+				map.setOptions( {disablePanning: true} );
+			})
+			jQuery("#infobox").live("mouseleave", function(){
+				map.setOptions( {disablePanning: false} );
+			});
+		});
 
          //A buffer limit to use to specify the infobox must be away from the edges of the map.
          var buffer = 25;
