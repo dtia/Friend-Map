@@ -1,54 +1,123 @@
 var locations = {};
-function main() {
-	<% Settings.reload! %>
+var loginStatusResponse;
 
-	// get friends' locations
-	console.log('getting friends locations');
-	
-   	FB.getLoginStatus(function(loginStatusResponse) {
-		hideLoginButton();
-		showWaitingMessage("Finding your friends' locations on facebook ...");
+window.fbAsyncInit = function() {
+  FB.init({
+    appId      : <%= Settings.app_id %>, // App ID
+    status     : true, // check login status
+    cookie     : true, // enable cookies to allow the server to access the session
+    xfbml      : true  // parse XFBML
+  });
+
+	FB.Event.subscribe('auth.statusChange', function(response) {
+	    if(response.status == 'connected') {
+	        hideLoginButton();
+			loginStatusResponse = response;
+	    }
+	});	
+};
+
+// Load the SDK Asynchronously
+(function(d){
+   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement('script'); js.id = id; js.async = true;
+   js.src = "//connect.facebook.net/en_US/all.js";
+   ref.parentNode.insertBefore(js, ref);
+ }(document));
+
+
+function plotFriends() {
+	showWaitingMessage("Finding your friends' locations on facebook ...");
+
+	var access_token = loginStatusResponse.authResponse.accessToken;
+	var query = 'SELECT uid, name, pic_square, current_location FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND current_location != \'\'';
+	var url = encodeURI('https://graph.facebook.com/fql?q=' + query + '&access_token=' + access_token);
+
+	$.get(url).complete(function(resp) { 
+		data = JSON.parse(resp.responseText).data;
+
+		for (var i=0; i < data.length; i++) {
+			uid = data[i].uid;
+			name = data[i].name;
+			pic = data[i].pic_square;
+			city = data[i].current_location.name;
 		
-		var access_token = loginStatusResponse.authResponse.accessToken;
-		var query = 'SELECT uid, name, pic_square, current_location FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND current_location != \'\'';
-		var url = encodeURI('https://graph.facebook.com/fql?q=' + query + '&access_token=' + access_token);
+			var userInfo = {};
+			userInfo.uid = uid;
+			userInfo.name = name;
+			userInfo.pic = pic;
+			userInfo.city = city;
 		
-		$.get(url).complete(function(resp) { 
-			data = JSON.parse(resp.responseText).data;
-
-			for (var i=0; i < data.length; i++) {
-				uid = data[i].uid;
-				name = data[i].name;
-				pic = data[i].pic_square;
-				city = data[i].current_location.name;
-				
-				var userInfo = {};
-				userInfo.uid = uid;
-				userInfo.name = name;
-				userInfo.pic = pic;
-				userInfo.city = city;
-				
-				var userInfoList;
-				if (locations[city] !== undefined) {
-					// retrieve list of users first
-					userInfoList = locations[city];
-				}
-				else {
-					userInfoList = [];
-				}
-
-				userInfoList.push(userInfo);
-				locations[city] = userInfoList;				
+			var userInfoList;
+			if (locations[city] !== undefined) {
+				// retrieve list of users first
+				userInfoList = locations[city];
 			}
-			
-			showWaitingMessage("Plotting friends on map ...");
-			addMarkersForLocations(locations);
-		});		
+			else {
+				userInfoList = [];
+			}
+
+			userInfoList.push(userInfo);
+			locations[city] = userInfoList;				
+		}
+	
+		showWaitingMessage("Plotting friends on map ...");
+		addMarkersForLocations(locations);
 	});
 }
 
+// function main() {
+// 	<% Settings.reload! %>
+// 
+// 	// get friends' locations
+// 	console.log('getting friends locations');
+// 	
+//    	FB.getLoginStatus(function(loginStatusResponse) {
+// 		hideLoginButton();
+// 		showWaitingMessage("Finding your friends' locations on facebook ...");
+// 		
+// 		var access_token = loginStatusResponse.authResponse.accessToken;
+// 		var query = 'SELECT uid, name, pic_square, current_location FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND current_location != \'\'';
+// 		var url = encodeURI('https://graph.facebook.com/fql?q=' + query + '&access_token=' + access_token);
+// 		
+// 		$.get(url).complete(function(resp) { 
+// 			data = JSON.parse(resp.responseText).data;
+// 
+// 			for (var i=0; i < data.length; i++) {
+// 				uid = data[i].uid;
+// 				name = data[i].name;
+// 				pic = data[i].pic_square;
+// 				city = data[i].current_location.name;
+// 				
+// 				var userInfo = {};
+// 				userInfo.uid = uid;
+// 				userInfo.name = name;
+// 				userInfo.pic = pic;
+// 				userInfo.city = city;
+// 				
+// 				var userInfoList;
+// 				if (locations[city] !== undefined) {
+// 					// retrieve list of users first
+// 					userInfoList = locations[city];
+// 				}
+// 				else {
+// 					userInfoList = [];
+// 				}
+// 
+// 				userInfoList.push(userInfo);
+// 				locations[city] = userInfoList;				
+// 			}
+// 			
+// 			showWaitingMessage("Plotting friends on map ...");
+// 			addMarkersForLocations(locations);
+// 		});		
+// 	});
+// }
+
 function hideLoginButton() {
 	$("#login-button-box").remove();
+	$("#showfriendsbutton").show();
 }
 
 function showWaitingMessage(message) {
