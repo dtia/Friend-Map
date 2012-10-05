@@ -82,7 +82,7 @@ function addMarkersOnMap(location, userInfoList) {
 	{
 		this.setOptions({ visible:false });
 	}.bind(pinInfobox));
-
+	
 	map.entities.push(pin);
 	map.entities.push(pinInfobox);
 }
@@ -171,10 +171,10 @@ function displayInfobox(e) {
 		jQuery(document).ready(function(){
 			// Disable map Dragging when cursor enters infoBox div
 			jQuery("#infobox").live("mouseenter", function(){
-				map.setOptions( {disablePanning: true} );
+				map.setOptions( {disableMouseInput: true} );
 			})
 			jQuery("#infobox").live("mouseleave", function(){
-				map.setOptions( {disablePanning: false} );
+				map.setOptions( {disableMouseInput: false} );
 			});
 		});
 
