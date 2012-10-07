@@ -66,8 +66,8 @@ class Location < ActiveRecord::Base
     end
 
     def self.get_ip_coordinates()      
-      @@geo_result =  Geocoder.search(@ip).first
-      puts @@geo_result.inspect.to_s
-      return {:latitude => @@geo_result.latitude, :longitude => @@geo_result.longitude}
+      @geo_result =  Geocoder.search(@@ip).first
+      puts @geo_result.inspect.to_s
+      return {:latitude => @geo_result.latitude, :longitude => @geo_result.longitude}
     end
 end
