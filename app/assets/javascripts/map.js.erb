@@ -4,6 +4,7 @@ var pinLayer;
 var infoboxLayer;
 var pushpinFrameHTML;
 var currentPinInfobox;
+var MAX_NUM_ANCHORS = 5;
 
 function initialize()
 {
@@ -90,7 +91,7 @@ function addMarkersOnMap(location, userInfoList) {
 function getTitle(location, userInfoList) {
 	address = location.address;
 
-	if (userInfoList.length > 5) {
+	if (userInfoList.length > MAX_NUM_ANCHORS) {
 		address += ' (' + userInfoList.length + ')';
 	}
 	
@@ -167,16 +168,19 @@ function displayInfobox(e) {
 		
         this.setLocation(e.target.getLocation());
 
-
-		jQuery(document).ready(function(){
-			// Disable map Dragging when cursor enters infoBox div
-			jQuery("#infobox").live("mouseenter", function(){
-				map.setOptions( {disableMouseInput: true} );
-			})
-			jQuery("#infobox").live("mouseleave", function(){
-				map.setOptions( {disableMouseInput: false} );
-			});
-		});
+		// TODO: need to make this more robust
+		var numAnchors = document.getElementById('infobox_content').getElementsByTagName('a').length;
+		if (numAnchors > MAX_NUM_ANCHORS) {
+			$(document).ready(function(){			
+				// Disable map Dragging when cursor enters infoBox div
+				$("#infobox").on("mouseenter", function(){
+					map.setOptions( {disableMouseInput: true} );
+				})
+				$("#infobox").on("mouseleave", function(){
+					map.setOptions( {disableMouseInput: false} );
+				});
+			});	
+		}
 
          //A buffer limit to use to specify the infobox must be away from the edges of the map.
          var buffer = 25;
