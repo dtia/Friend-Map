@@ -23,7 +23,7 @@ function initialize()
 	pinLayer = new Microsoft.Maps.EntityCollection();
 	map.entities.push(pinLayer);
 	
-	pushpinFrameHTML = '<div id="infobox" class="infobox"><div class="infobox_content">{content}</div></div><div class="infobox_pointer"><img src= <%= asset_path("pointer_shadow.png") %> /></div>';
+	pushpinFrameHTML = '<div id="infobox" class="infobox"><div id="infobox_content" class="infobox_content">{content}</div></div><div class="infobox_pointer"><img src= <%= asset_path("pointer_shadow.png") %> /></div>';
 }
 
 function addMarkersOnMapForLocations(locations) {
