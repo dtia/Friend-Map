@@ -59,4 +59,13 @@ class Location < ActiveRecord::Base
         return {:address => address, :latitude => location.latitude, :longitude => location.longitude}        
       end
     end
+
+    def self.set_ip(ip)
+      @ip = ip
+    end
+
+    def self.get_ip_coordinates()
+      @geo_result =  Geocoder.search(@ip).first
+      return {:latitude => @geo_result.latitude, :longitude => @geo_result.longitude}
+    end
 end

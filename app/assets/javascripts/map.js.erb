@@ -13,7 +13,6 @@ function initialize()
 		center: new Microsoft.Maps.Location(37.7577,-122.4376),
 		mapTypeId: Microsoft.Maps.MapTypeId.road,
 		zoom: 6});
-	
 	geocoder = new google.maps.Geocoder();
 		
 	//Create two layers, one for pushpins, the other for the infobox. This way the infobox will always be above the pushpins.
@@ -27,8 +26,9 @@ function initialize()
 }
 
 function addMarkersOnMapForLocations(locations) {
-	console.log('adding markers...');
+	console.log('Adding markers...');
 	
+	map.setView({center: new Microsoft.Maps.Location('<%= Location.get_ip_coordinates()[:latitude] %>', '<%= Location.get_ip_coordinates()[:longitude] %>')})
 	setStatusCount(locations);
 	
 	for(address in locations){
@@ -127,7 +127,7 @@ function addMarkersForLocations(locations) {
 		    type: "POST",
 		    data: {locations: JSON.stringify(addresses)},
 		    success: function(resp){
-				console.log('locations posted');
+				console.log('Locations posted');
 				if (resp) {
 					for (var i=0; i<resp.length; i++) {
 						loc = resp[i];
