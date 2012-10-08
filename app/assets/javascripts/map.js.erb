@@ -10,7 +10,7 @@ function initialize()
 {
     map = new Microsoft.Maps.Map(document.getElementById("mapDiv"), {
 		credentials:"AkL7bdBJmEpRncJpZ9MmXwEUIvnkId7Yo9IJrDhNFGrkR--08hfritan5JH_nzRw",
-		center: new Microsoft.Maps.Location(37.7577,-122.4376),		
+		center: new Microsoft.Maps.Location(37.7577,-122.4376),
 		mapTypeId: Microsoft.Maps.MapTypeId.road,
 		zoom: 6});
 	geocoder = new google.maps.Geocoder();
@@ -28,7 +28,6 @@ function initialize()
 function addMarkersOnMapForLocations(locations) {
 	console.log('Adding markers...');
 	
-	map.setView({center: new Microsoft.Maps.Location('<%= Location.get_ip_coordinates()[:latitude] %>', '<%= Location.get_ip_coordinates()[:longitude] %>')})
 	setStatusCount(locations);
 	
 	for(address in locations){
@@ -115,6 +114,8 @@ function replaceWhiteSpace(str) {
 }
 
 function addMarkersForLocations(locations) {
+	map.setView({center: new Microsoft.Maps.Location('<%= Location.get_ip_coordinates()[:latitude] %>', '<%= Location.get_ip_coordinates()[:longitude] %>')})
+
 	var addresses = [];
 	for(address in locations){
 		if(locations.hasOwnProperty(address)){
