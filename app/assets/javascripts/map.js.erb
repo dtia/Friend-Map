@@ -4,6 +4,9 @@ var pinLayer;
 var infoboxLayer;
 var pushpinFrameHTML;
 var currentPinInfobox;
+var locationData = [];
+var pinClusterer;
+
 var MAX_NUM_ANCHORS = 5;
 
 function initialize()
@@ -12,7 +15,7 @@ function initialize()
 		credentials:"AkL7bdBJmEpRncJpZ9MmXwEUIvnkId7Yo9IJrDhNFGrkR--08hfritan5JH_nzRw",
 		center: new Microsoft.Maps.Location(37.7577,-122.4376),
 		mapTypeId: Microsoft.Maps.MapTypeId.road,
-		zoom: 6});
+		zoom: 4});
 	geocoder = new google.maps.Geocoder();
 		
 	//Create two layers, one for pushpins, the other for the infobox. This way the infobox will always be above the pushpins.
@@ -37,6 +40,10 @@ function addMarkersOnMapForLocations(locations) {
 			addMarkersOnMap(locationInfo.loc, userInfoList);
 		}
 	}
+	
+	pinClusterer = new PinClusterer(map, { clickToZoom: false });
+	pinClusterer.cluster(locationData);
+	pinClusterer._redraw();
 }
 
 function setStatusCount(locations) {
@@ -65,26 +72,7 @@ function addMarkersOnMap(location, userInfoList) {
 
 	var loc = new Microsoft.Maps.Location(location.latitude, location.longitude);
 	var pin = new Microsoft.Maps.Pushpin(loc);
-	pin.title = getTitle(location, userInfoList);
-	pin.description = userInfoList;
-	pinLayer.push(pin);
-	
-	// Create the infobox for the pushpin
-    var pinInfobox = new Microsoft.Maps.Infobox(pin.getLocation(), {visible:false});
-	infoboxLayer.push(pinInfobox);
-	currentPinInfobox = pinInfobox;
-
-	 // Add handler for the pushpin click event.
-    Microsoft.Maps.Events.addHandler(pin, 'click', displayInfobox.bind(pinInfobox));
-
-	// Hide infobox when anywhere on map is clicked
-	Microsoft.Maps.Events.addHandler(map, 'click', function displayInfobox(e)
-	{
-		this.setOptions({ visible:false });
-	}.bind(pinInfobox));
-	
-	map.entities.push(pin);
-	map.entities.push(pinInfobox);
+	locationData.push({ "latitude": location.latitude , "longitude": location.longitude, "title": getTitle(location, userInfoList), "description": userInfoList });
 }
 
 function getTitle(location, userInfoList) {
@@ -99,7 +87,6 @@ function getTitle(location, userInfoList) {
 
 function getFriendProfileLinks(userInfoList) {
 	markupString = '';
-	
 	for (var i=0; i<userInfoList.length; i++) {
 		userInfo = userInfoList[i];
 		link = '<a href="http://www.facebook.com/' + userInfo.uid + '" target="_blank" ><img class="profile_pic" src="' + userInfo.pic + '" />' + userInfo.name + '</a><br/>';
@@ -163,7 +150,7 @@ function displayInfobox(e) {
 		
 		this.setOptions({
 			visible:!this.getVisible(),
-			offset: new Microsoft.Maps.Point(-33,20),
+			offset: new Microsoft.Maps.Point(-33,10),
 			htmlContent: pushpinFrameHTML.replace('{content}',html)
 		});
 		
