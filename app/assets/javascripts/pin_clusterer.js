@@ -200,7 +200,8 @@
 		},
 		
 		zoom: function () {
-			this._pinClusterer.map.setView({ center: this.center.location, zoom: _defaults.maxViewZoom });
+			zoomTo = Math.max(_defaults.maxViewZoom, this._zoom);
+			this._pinClusterer.map.setView({ center: this.center.location, zoom: zoomTo });
 		},
 		
 		_alreadyAdded: function (location) {
