@@ -6,7 +6,7 @@
 			clusterTypeName		: 'pin_clusterer cluster',
 			pinSize						: 16,
 			extendMapBoundsBy			: 2,
-			gridSize					: 25,
+			gridSize					: 60,
 			maxZoom						: 16,
 			maxViewZoom					: 5,
 			clickToZoom				: false,
