@@ -8,7 +8,7 @@
 			extendMapBoundsBy			: 2,
 			gridSize					: 60,
 			maxZoom						: 16,
-			maxViewZoom					: 5,
+			maxViewZoom					: 6,
 			clickToZoom				: false,
 			onClusterToMap		: null
 		},
@@ -200,7 +200,7 @@
 		},
 		
 		zoom: function () {
-			zoomTo = Math.max(_defaults.maxViewZoom, this._zoom);
+			zoomTo = Math.max(_defaults.maxViewZoom, this._pinClusterer.map.getZoom());		
 			this._pinClusterer.map.setView({ center: this.center.location, zoom: zoomTo });
 		},
 		
