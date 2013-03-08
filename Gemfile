@@ -47,3 +47,4 @@ end
 gem 'json'
 gem 'rails_config'
 gem 'geocoder'
+gem 'newrelic_rpm'
