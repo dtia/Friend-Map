@@ -32,7 +32,7 @@ function addMarkersOnMapForLocations(locations) {
 	console.log('Adding markers...');
 	
 	setStatusCount(locations);
-	
+	console.log('inside addMarkersOnMapForLocations', locations);
 	for(address in locations){
 		if(locations.hasOwnProperty(address)){
 			locationInfo = locations[address];
@@ -117,6 +117,7 @@ function addMarkersForLocations(locations) {
 		    success: function(resp){
 				console.log('Locations posted');
 				if (resp) {
+					console.log('inside addmarkersforlocations', resp);
 					for (var i=0; i<resp.length; i++) {
 						loc = resp[i];
 						addCoordsToLocation(locations, loc);
